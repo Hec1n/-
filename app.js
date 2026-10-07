@@ -4,7 +4,7 @@ const saved=readSaved(); saved.errors??=[];saved.history??=[];
 function persist(){try{localStorage.setItem('kotoba-v1',JSON.stringify(saved))}catch{$('feedback').textContent+=' Результат не удалось сохранить в браузере.'}}
 const normalize=s=>s.normalize('NFKC').toLowerCase().replace(/ё/g,'е').replace(/[。！？!?.,、]/g,'').replace(/\s+/g,' ').trim();
 function shuffle(items){let a=[...items];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function pool(){if($('kind').value==='kanji')return KANJI;return WORDS.filter(w=>({all:true,series:!!w.num,first:w.num&&w.num<=30,new:w.num>30,extra:!w.num,errors:saved.errors.includes(w.id)})[$('pool').value])}
+function pool(){if($('kind').value==='kanji')return KANJI;return WORDS.filter(w=>({all:true,series:!!w.num,first:w.num&&w.num<=30,new:w.num>30,verbs:w.studySet==='verbs-oct7',adjectives:w.studySet==='adjectives-oct7',extra:!w.num,errors:saved.errors.includes(w.id)})[$('pool').value])}
 function settings(){const kanji=$('kind').value==='kanji';$('poolLabel').hidden=kanji;$('kanjiLabel').hidden=!kanji;$('direction').parentElement.hidden=kanji;const n=pool().length;$('count').max=Math.max(n,1);$('available').textContent=`Доступно: ${n} ${kanji?'карточек кандзи':'слов'}.`}
 ['kind','pool'].forEach(id=>$(id).addEventListener('change',settings));
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!==b.dataset.tab);document.querySelectorAll('[data-tab]').forEach(n=>n.classList.toggle('active',n===b))});
